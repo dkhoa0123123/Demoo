@@ -1,25 +1,109 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34622.214
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp3", "ConsoleApp3\ConsoleApp3.csproj", "{CE04A160-0FFC-491E-B9D4-94780D8ED243}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CE04A160-0FFC-491E-B9D4-94780D8ED243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE04A160-0FFC-491E-B9D4-94780D8ED243}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE04A160-0FFC-491E-B9D4-94780D8ED243}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE04A160-0FFC-491E-B9D4-94780D8ED243}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A310E9F8-5E5A-4D96-B8DD-7734B5FDDAE6}
-	EndGlobalSection
-EndGlobal
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // nhập số lượng điểm và chiều cao của chúng
+        Console.Write("Input number of position: ");
+        int n = int.Parse(Console.ReadLine());
+        int[] height = new int[n];
+
+        Console.WriteLine("Height of each position:");
+        for (int i = 0; i < n; i++)
+        {
+            Console.Write($"Position {i + 1}: ");
+            height[i] = int.Parse(Console.ReadLine());
+        }
+
+
+
+        // nếu có 2 điểm liền kề giống nhau, chênh lệch chiều cao là 0
+        if (Sameheight(height))
+        {
+            Console.WriteLine("Min value of difference height: 0");
+        }
+        else
+        {
+            // giá trị tối thiểu của chênh lệch chiều cao lớn nhất giữa các điểm liền kề
+            int Mindiffer = int.MaxValue;
+
+            // giá trị trung bình của mảng
+            int sum = 0;
+            for (int i = 0; i < n; i++)
+            {
+                sum += height[i];
+            }
+            int avr = sum / n;
+
+
+
+
+            // chia mảng thành hai phần
+            int[] leftA = new int[n];
+            int[] rightA = new int[n];
+            int leftCount = 0, rightCount = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                if (height[i] < avr)
+                {
+                    leftA[leftCount++] = height[i];
+                }
+                else
+                {
+                    rightA[rightCount++] = height[i];
+                }
+            }
+
+
+
+            // giá trị lớn nhất của phần nhỏ hơn 
+            int maxLeft = int.MinValue;
+            // giá trị nhỏ nhất của phần lớn hơn
+            int minRight = int.MaxValue;
+
+            for (int i = 0; i < leftCount; i++)
+            {
+                if (leftA[i] > maxLeft)
+                {
+                    maxLeft = leftA[i];
+                }
+            }
+
+            for (int i = 0; i < rightCount; i++)
+            {
+                if (rightA[i] < minRight)
+                {
+                    minRight = rightA[i];
+                }
+            }
+
+
+
+            // tính toán chênh lệch
+            int differ = Math.Abs(maxLeft - minRight);
+            if (differ < Mindiffer)
+            {
+                Mindiffer = differ;
+            }
+
+            Console.WriteLine($"Min value of difference height: {Mindiffer}");
+        }
+    }
+
+
+
+    // nếu có 2 điểm liền kề giống nhau, chênh lệch chiều cao là 0
+    static bool Sameheight(int[] array)
+    {
+        for (int i = 0; i < array.Length - 1; i++)
+        {
+            if (array[i] == array[i + 1])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+}
